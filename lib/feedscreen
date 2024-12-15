@@ -1,0 +1,51 @@
+import 'package:flutter/material.dart';
+
+class FeedScreen extends StatelessWidget {
+  final List<Map<String, String>> posts = [
+    {'title': 'Post 1', 'description': 'Description 1', 'image': 'https://via.placeholder.com/150'},
+    {'title': 'Post 2', 'description': 'Description 2', 'image': 'https://via.placeholder.com/150'},
+  ];
+
+
+  void _deletePost(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Are you sure?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text('Yes')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text('No')),
+        ],
+      ),
+    );
+  }
+
+
+  void _downloadImage(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Image downloaded successfully!")));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Feed")),
+      body: ListView.builder(
+        itemCount: posts.length,
+        itemBuilder: (context, index) {
+          var post = posts[index];
+          return ListTile(
+            leading: Image.network(post['image']!, width: 50, height: 50, fit: BoxFit.cover),
+            title: Text(post['title']!),
+            subtitle: Text(post['description']!),
+            trailing: IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () => _deletePost(context),
+            ),
+            onLongPress: () => _downloadImage(context),
+          );
+        },
+      ),
+    );
+  }
+}
+
